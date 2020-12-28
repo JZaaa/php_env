@@ -1,0 +1,54 @@
+version: "3"
+
+services:
+    webserver56:
+        build:
+            context: ./bin/php56/
+        container_name: httpd-php56
+        privileged: true
+        ports:
+          - "80:80"
+        restart: always
+        volumes:
+            - ./conf/php/php56/php.ini:/usr/local/etc/php/php.ini
+            - ./conf/php/php56/vhosts:/etc/apache2/sites-enabled
+            - ./site/www56/:/var/www/html/
+            - ./logs/php56/apache2/:/var/log/apache2/
+        links: 
+            - database
+            
+    webserver74:
+        build:
+            context: ./bin/php74/
+        container_name: httpd-php74
+        privileged: true
+        ports:
+          - "90:80"
+        restart: always
+        volumes:
+            - ./conf/php/php74/php.ini:/usr/local/etc/php/php.ini
+            - ./conf/php/php74/vhosts:/etc/apache2/sites-enabled
+            - ./site/www74/:/var/www/html/
+            - ./logs/php74/apache2/:/var/log/apache2/
+        links: 
+            - database
+
+    database:
+        image: mysql:5.7
+        container_name: mysql-5.7
+        restart: always
+        ports: 
+            - "3306:3306"
+        volumes:
+            - ./conf/mysql/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+            - ./data/mysql:/var/lib/mysql
+            - ./logs/mysql:/var/log/mysql
+        environment: 
+            MYSQL_ROOT_PASSWORD: 123456
+            
+
+
+
+
+
+
