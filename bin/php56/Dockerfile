@@ -3,7 +3,7 @@ FROM php:5.6-apache-stretch
 COPY ./sources.list.stretch /etc/apt/sources.list
 
 RUN apt-get update && apt-get install -y --fix-missing \
-		apt-utils curl libcurl3 libcurl3-dev zip \
+		apt-utils curl libcurl3 libcurl3-dev libzip-dev zip \
 		libmcrypt-dev libsqlite3-dev libsqlite3-0\
         libfreetype6-dev \
         libjpeg62-turbo-dev \
@@ -21,6 +21,8 @@ RUN apt-get update && apt-get install -y --fix-missing \
     && docker-php-ext-install -j$(nproc) gd \
 	&& docker-php-ext-configure intl \
 	&& docker-php-ext-install -j$(nproc) intl \
+	&& docker-php-ext-configure zip --with-libzip \
+	&& docker-php-ext-install zip \
     && docker-php-ext-install pdo pdo_mysql mysqli curl sockets bcmath mbstring \
 	&& docker-php-ext-configure opcache --enable-opcache && docker-php-ext-install opcache \
 	&& curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
